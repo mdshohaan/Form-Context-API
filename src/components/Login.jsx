@@ -1,9 +1,10 @@
 import React, { useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "./AuthProvider";
 
 const Login = () => {
-  const { signInUser } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const { signInUser, signInGoogle } = useContext(AuthContext);
   const handleLogIn = (e) => {
     e.preventDefault();
 
@@ -14,10 +15,22 @@ const Login = () => {
     signInUser(email, password)
       .then((result) => {
         console.log(result.user);
+        e.target.reset();
+        navigate("/");
       })
       .catch((error) => {
         console.log(error.message);
       });
+   
+  };
+   // signwith Google
+   const handleGoogleSignIn = () => {
+    signInGoogle()
+      .then((res) => {
+        console.log(res.user);
+        navigate("/");
+      })
+      .catch((err) => console.log(err.message));
   };
   return (
     <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl mx-auto">
@@ -53,6 +66,9 @@ const Login = () => {
         </div>
         <div className="form-control mt-6">
           <button className="btn btn-primary">Login</button>
+          <button onClick={handleGoogleSignIn} className="btn btn-error my-2">
+            Google
+          </button>
         </div>
       </form>
       <div>

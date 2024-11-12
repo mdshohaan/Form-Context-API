@@ -1,31 +1,30 @@
 import React, { useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "./AuthProvider";
 
 const Register = () => {
+  const navigate = useNavigate()
   const { createUser } = useContext(AuthContext);
-
 
   const handleRegister = (e) => {
     e.preventDefault();
     const name = e.target.name.value;
     const email = e.target.email.value;
     const password = e.target.password.value;
-    console.log(name,email, password);
+    console.log(name, email, password);
 
-
-     // create user
-  createUser(email,password)
-  .then(result => {
-    console.log(result.user);
-  })
-  .catch(error =>{
-    console.log(error.message);
-  })
+    // create user
+    createUser(email, password)
+      .then((result) => {
+        console.log(result.user);
+        e.target.reset()
+        navigate("/")
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
   };
 
- 
-  
   return (
     <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl mx-auto">
       <form onSubmit={handleRegister} className="card-body">
